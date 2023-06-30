@@ -1,105 +1,103 @@
 import unittest
 import time
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 
 class TestLogin(unittest.TestCase):
     def setUp(self):
-        self.browser = webdriver.Chrome(ChromeDriverManager().install())
+        self.browser = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
     def test_a_success_login(self):
         # steps
         browser = self.browser  # buka web browser
-        browser.get("http://barru.pythonanywhere.com/daftar")  # buka situs
+        browser.get("https://practicetestautomation.com/practice-test-login/")  # buka situs
         time.sleep(3)
-        browser.find_element(By.XPATH, "/html/body/div/div[2]/form/input[1]").send_keys(
-            "tester@jagoqa.com"
-        )  # isi email
+        browser.find_element(By.ID, "username").send_keys(
+            "student"
+        )  # isi username
         time.sleep(1)
-        browser.find_element(By.CSS_SELECTOR, "input#password").send_keys(
-            "testerjago"
+        browser.find_element(By.ID, "password").send_keys(
+            "Password123"
         )  # isi password
         time.sleep(1)
-        browser.find_element(By.ID, "signin_login").click()  # klik tombol sign in
+        browser.find_element(By.ID, "submit").click()  # klik tombol submit
         time.sleep(1)
 
         # validasi
-        response_data = browser.find_element(By.ID, "swal2-title").text
-        response_message = browser.find_element(By.ID, "swal2-content").text
+        # Get the current URL
+        current_url = browser.current_url
 
-        self.assertIn("Welcome", response_data)
-        self.assertEqual(response_message, "Anda Berhasil Login")
+        # Define the expected URL
+        expected_url = "https://practicetestautomation.com/logged-in-successfully/"
 
-    def test_a_failed_login_with_empty_email(self):
+        # Check if the expected URL is included in the current URL
+        self.assertIn(expected_url, current_url)
+
+    def test_a_failed_login_with_empty_username(self):
         # steps
         browser = self.browser  # buka web browser
-        browser.get("http://barru.pythonanywhere.com/daftar")  # buka situs
+        browser.get("https://practicetestautomation.com/practice-test-login/")  # buka situs
         time.sleep(3)
-        browser.find_element(By.XPATH, "/html/body/div/div[2]/form/input[1]").send_keys(
-            ""
-        )  # isi email
+        browser.find_element(By.ID, "username").send_keys(
+            " "
+        )  # isi username
         time.sleep(1)
-        browser.find_element(By.CSS_SELECTOR, "input#password").send_keys(
-            "testerjago"
+        browser.find_element(By.ID, "password").send_keys(
+            "Password123"
         )  # isi password
         time.sleep(1)
-        browser.find_element(By.ID, "signin_login").click()  # klik tombol sign in
+        browser.find_element(By.ID, "submit").click()  # klik tombol submit
         time.sleep(1)
 
         # validasi
-        response_data = browser.find_element(By.ID, "swal2-title").text
-        response_message = browser.find_element(By.ID, "swal2-content").text
+        response_message = browser.find_element(By.ID, "error").text
 
-        self.assertIn("data tidak valid", response_data)
-        self.assertEqual(response_message, "Cek kembali email anda")
+        self.assertEqual(response_message, "Your username is invalid!")
 
     def test_a_failed_login_with_empty_password(self):
-        # steps
+       # steps
         browser = self.browser  # buka web browser
-        browser.get("http://barru.pythonanywhere.com/daftar")  # buka situs
+        browser.get("https://practicetestautomation.com/practice-test-login/")  # buka situs
         time.sleep(3)
-        browser.find_element(By.XPATH, "/html/body/div/div[2]/form/input[1]").send_keys(
-            "tester@jagoqa.com"
-        )  # isi email
+        browser.find_element(By.ID, "username").send_keys(
+            "student"
+        )  # isi username
         time.sleep(1)
-        browser.find_element(By.CSS_SELECTOR, "input#password").send_keys(
-            ""
+        browser.find_element(By.ID, "password").send_keys(
+            " "
         )  # isi password
         time.sleep(1)
-        browser.find_element(By.ID, "signin_login").click()  # klik tombol sign in
+        browser.find_element(By.ID, "submit").click()  # klik tombol submit
         time.sleep(1)
 
         # validasi
-        response_data = browser.find_element(By.ID, "swal2-title").text
-        response_message = browser.find_element(By.ID, "swal2-content").text
+        response_message = browser.find_element(By.ID, "error").text
 
-        self.assertIn("not found", response_data)
-        self.assertEqual(response_message, "Email atau Password Anda Salah")
+        self.assertEqual(response_message, "Your password is invalid!")
 
-    def test_a_failed_login_with_empty_email_and_password(self):
+    def test_a_failed_login_with_empty_username_and_password(self):
         # steps
         browser = self.browser  # buka web browser
-        browser.get("http://barru.pythonanywhere.com/daftar")  # buka situs
+        browser.get("https://practicetestautomation.com/practice-test-login/")  # buka situs
         time.sleep(3)
-        browser.find_element(By.XPATH, "/html/body/div/div[2]/form/input[1]").send_keys(
-            ""
-        )  # isi email
+        browser.find_element(By.ID, "username").send_keys(
+            " "
+        )  # isi username
         time.sleep(1)
-        browser.find_element(By.CSS_SELECTOR, "input#password").send_keys(
-            ""
+        browser.find_element(By.ID, "password").send_keys(
+            " "
         )  # isi password
         time.sleep(1)
-        browser.find_element(By.ID, "signin_login").click()  # klik tombol sign in
+        browser.find_element(By.ID, "submit").click()  # klik tombol submit
         time.sleep(1)
 
         # validasi
-        response_data = browser.find_element(By.ID, "swal2-title").text
-        response_message = browser.find_element(By.ID, "swal2-content").text
+        response_message = browser.find_element(By.ID, "error").text
 
-        self.assertIn("data tidak valid", response_data)
-        self.assertEqual(response_message, "Cek kembali email/password anda")
+        self.assertEqual(response_message, "Your username is invalid!")
 
     def tearDown(self):
         self.browser.close()
